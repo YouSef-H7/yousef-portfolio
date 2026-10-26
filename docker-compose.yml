@@ -1,0 +1,21 @@
+services:
+  portfolio:
+    build: .
+    image: portfolio:latest
+    container_name: portfolio
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      TRUST_PROXY: "1"
+    # Only reachable from this machine; nginx on the host terminates TLS and proxies here.
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - portfolio-data:/data
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+volumes:
+  portfolio-data:
